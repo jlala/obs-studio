@@ -233,14 +233,19 @@ void OBSBasicStatusBar::Reconnect(int seconds)
 	}
 }
 
-void OBSBasicStatusBar::ReconnectSuccess()
+void OBSBasicStatusBar::ReconnectClear()
 {
-	showMessage(QTStr("Basic.StatusBar.ReconnectSuccessful"), 4000);
 	retries              = 0;
 	reconnectTimeout     = 0;
 	bitrateUpdateSeconds = -1;
 	lastBytesSent        = 0;
 	lastBytesSentTime    = os_gettime_ns();
+}
+
+void OBSBasicStatusBar::ReconnectSuccess()
+{
+	showMessage(QTStr("Basic.StatusBar.ReconnectSuccessful"), 4000);
+	ReconnectClear();
 
 	if (streamOutput) {
 		delaySecTotal = obs_output_get_active_delay(streamOutput);

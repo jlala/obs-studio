@@ -3466,6 +3466,8 @@ void OBSBasic::StreamingStop(int code)
 		QMessageBox::information(this,
 				QTStr("Output.ConnectFail.Title"),
 				QT_UTF8(errorMessage));
+	else
+		ui->statusbar->ReconnectClear();
 
 	if (!startStreamMenu.isNull()) {
 		ui->streamButton->setMenu(nullptr);
