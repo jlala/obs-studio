@@ -165,15 +165,16 @@ void obs_output_destroy(obs_output_t *output)
 
 		if (output->valid && active(output))
 			obs_output_actual_stop(output, true, 0);
+
+		os_event_wait(output->stopping_event);
+		pthread_join(output->end_data_capture_thread, NULL);
+
 		if (output->service)
 			output->service->output = NULL;
-
-		free_packets(output);
-
 		if (output->context.data)
 			output->info.destroy(output->context.data);
 
-		pthread_join(output->end_data_capture_thread, NULL);
+		free_packets(output);
 
 		if (output->video_encoder) {
 			obs_encoder_remove_output(output->video_encoder,
