@@ -363,12 +363,13 @@ static void *send_thread(void *data)
 	if (!stopping(stream)) {
 		pthread_detach(stream->send_thread);
 		obs_output_signal_stop(stream->output, OBS_OUTPUT_DISCONNECTED);
+	} else {
+		obs_output_end_data_capture(stream->output);
 	}
 
 	free_packets(stream);
 	os_event_reset(stream->stop_event);
 	os_atomic_set_bool(&stream->active, false);
-	obs_output_end_data_capture(stream->output);
 	stream->sent_headers = false;
 	return NULL;
 }
